@@ -8,6 +8,7 @@ from PIL import Image
 import cv2
 import os
 import warnings
+from huggingface_hub import hf_hub_download
 from app.craft_text_detector import Craft
 
 warnings.filterwarnings('ignore')
@@ -45,6 +46,14 @@ class EssayScoringService:
         num_labels: int = 17,  # классы: от 1.0 до 9.0 с шагом 0.5 → 17 классов
         device: Union[str, torch.device] = None
     ):
+        
+        if not os.path.exists(model_path):
+            model_path = hf_hub_download(
+                repo_id="ArtemBelogur/essay_scoring_model",
+                filename="best_model1.pt",  
+                local_dir="models"  
+            )
+
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
         self.tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=False)
         self.model = EssayScorer(model_name, num_labels)
