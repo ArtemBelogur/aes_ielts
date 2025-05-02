@@ -51,7 +51,7 @@ class EssayScoringService:
             model_path = hf_hub_download(
                 repo_id="ArtemBelogur/essay_scoring_model",
                 filename="best_model1.pt",  
-                local_dir="models"  
+                local_dir="app/models"  
             )
 
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
